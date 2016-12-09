@@ -4,13 +4,14 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
-<%@page errorPage="error.jsp" %>
+<%-- <%@page errorPage="error.jsp" %> --%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,700' rel='stylesheet' type='text/css'>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Enrolment Information</title>
+<fmt:setBundle basename="messages" />
+<title><fmt:message key="enrolment.title" /></title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link href="css/student/student_style.css" rel="stylesheet"
 	type="text/css" />
@@ -33,15 +34,15 @@
 </div>
  <div>
  <div class="col-sm-9">
- &nbsp;&nbsp;<span id="title"> View Enrollment Page</span>
+ &nbsp;&nbsp;<span id="title"> <fmt:message key="label.enrolment.title.viewEnrolment" /></span>
     <div class="right-content">
 					&nbsp;
 					<div id="content" class="align" style="height=600px">
-		<div id="subtitle">&nbsp;&nbsp;List of Enrolment</div>	
+		<div id="subtitle">&nbsp;&nbsp;<fmt:message key="label.enrolment.subtitle" /></div>	
 										
  <form action="${pageContext.request.contextPath}/admin_manageenrolment?action=addEnrolment" method="post">
- <h2>CourseID: <input type="number" name="CourseID" value="${param['CourseID']}" readonly="readonly" size=15 maxlength=20></h2>  
- <h2>StudentID: <input type="number" placeholder="example10000" name="StudentID" min=10000  size=15 maxlength=20> <span>${param['studentError']}</span>  </h2>                        
+ <h2><fmt:message key="label.course.courseId" /><input type="number" name="CourseID" value="${param['CourseID']}" readonly="readonly" size=15 maxlength=20></h2>  
+ <h2><fmt:message key="label.student.studentlist.studentid" /><input type="number" placeholder="example10000" name="StudentID" min=10000  size=15 maxlength=20> <span>${param['studentError']}</span>  </h2>                        
 <br/>
 
 <input id="add-button" type="submit" value="Add Enrolment">
@@ -49,8 +50,6 @@
 
 </form>
 <p class="message">${message}</p>
-
-
 <h2>${noEnrol}</h2>
 
 
@@ -69,7 +68,7 @@
                         </c:url>
                         <a href="${delurl}">
                         <button type="submit" id="add-button">
-                        <img src="images/delete_student.png" />Delete
+                        <img src="images/delete_student.png" /><fmt:message key="button.enrolment.delete" />
                         </button>
                         </a>
 	</display:column>

@@ -1,7 +1,6 @@
 
 package controller;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -10,13 +9,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import exception.ApplicationException;
 import model.CourseDTO;
 import model.EnrolmentDTO;
 import model.StudentDTO;
-import service.AdminCourseManager;
-import service.AdminEnrolmentManager;
-import service.AdminStudentManager;
+import service.AdminManager;
 
 /**
  * Servlet implementation class admin_manageenrollment
@@ -37,30 +36,29 @@ public class AdminEnrolmentController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doProcess(request,response);
+
+				doProcess(request,response);
+			
 	}
 
-	private void doProcess(HttpServletRequest request, HttpServletResponse response) {
+	private void doProcess(HttpServletRequest request, HttpServletResponse response)  {
 		
-		AdminEnrolmentManager enrolManager=new AdminEnrolmentManager();
-		AdminCourseManager courseManager=new AdminCourseManager();
-		AdminStudentManager studentManager=new AdminStudentManager();
+		AdminManager adminManager=new AdminManager();
+		HttpSession session=request.getSession();
+		if(session.getAttribute("role")!=null&&session.getAttribute("role").equals("admin"))
+		{
 		String action=request.getParameter("action");
-		System.out.println(action);
 		String courseID = request.getParameter("CourseID");
-		System.out.println(courseID);
 		String studentID=request.getParameter("StudentID");
 		if(action!=null&&action.equals("view"))
-		{
-			System.out.println("view");
+		{		
+			CourseDTO course=adminManager.findCourse(Integer.parseInt(courseID));
 			
-			CourseDTO course=courseManager.findCourse(Integer.parseInt(courseID));
-			System.out.println(course);
-			ArrayList<EnrolmentDTO> data=enrolManager.findEnrolmentByCourse(course);
+			ArrayList<EnrolmentDTO> data=adminManager.findEnrolmentByCourse(course);
 			if(data!=null)
 			{
 				
-				enrolManager.findEnrolmentByCourse(course);
+				adminManager.findEnrolmentByCourse(course);
 				request.setAttribute("enrolment", data);
 				request.setAttribute("CourseID", courseID);
 			}
@@ -69,10 +67,6 @@ public class AdminEnrolmentController extends HttpServlet {
 				request.setAttribute("noEnrol", "No Enrolment");
 			}
 			
-			
-			
-			
-			System.out.println(data);
 			RequestDispatcher rd = request.getRequestDispatcher("/admin_manageenrolment.jsp?action=");
 			try {
 				rd.forward(request, response);
@@ -90,21 +84,21 @@ public class AdminEnrolmentController extends HttpServlet {
 			String path="";
 			 try {
 				 int id = Integer.parseInt(request.getParameter("StudentID"));
-				 StudentDTO student=studentManager.findStudent(Integer.parseInt(request.getParameter("StudentID")));
-					CourseDTO course =courseManager.findCourse(Integer.parseInt(request.getParameter("CourseID")));
+				 StudentDTO student=adminManager.findStudent(Integer.parseInt(request.getParameter("StudentID")));
+					CourseDTO course =adminManager.findCourse(Integer.parseInt(request.getParameter("CourseID")));
 					
 					if(student!=null)
 					{
 						if(course !=null)
 						{
-							ArrayList<EnrolmentDTO> data=enrolManager.findEnrolmentByCourse(course);
+							ArrayList<EnrolmentDTO> data=adminManager.findEnrolmentByCourse(course);
 							
-								if(enrolManager.checkDuplicate(student,course)&&enrolManager.checkSize(course))
+								if(adminManager.checkDuplicate(student,course)&&adminManager.checkSize(course))
 								{
 									
 									EnrolmentDTO enrolment=new EnrolmentDTO(student,course);
-									int addEnrol=enrolManager.createEnrolment(enrolment);
-									System.out.println(addEnrol);
+									int addEnrol=adminManager.createEnrolment(enrolment);
+									
 									request.setAttribute("message", "success");
 									path="admin_manageenrolment?action=view";
 								}
@@ -154,13 +148,11 @@ public class AdminEnrolmentController extends HttpServlet {
 		}
 		else if (action!=null&&action.equals("delete"))
 		{
-			System.out.println("delete");
-			StudentDTO student=studentManager.findStudent(Integer.parseInt(request.getParameter("StudentID")));
-			CourseDTO course =courseManager.findCourse(Integer.parseInt(request.getParameter("CourseID")));
+			
+			StudentDTO student=adminManager.findStudent(Integer.parseInt(request.getParameter("StudentID")));
+			CourseDTO course =adminManager.findCourse(Integer.parseInt(request.getParameter("CourseID")));
 			EnrolmentDTO enrol=new EnrolmentDTO(student,course);
-			int deleteEnrol=enrolManager.deleteEnrolment(enrol);
-			System.out.println(deleteEnrol);
-			System.out.println(deleteEnrol);
+			int deleteEnrol=adminManager.deleteEnrolment(enrol);
 			request.setAttribute("message", "success");
 			RequestDispatcher rd = request.getRequestDispatcher("admin_manageenrolment?action=view");
 			try {
@@ -175,7 +167,7 @@ public class AdminEnrolmentController extends HttpServlet {
 		}
 		else
 		{
-			ArrayList<CourseDTO> data = courseManager.listAllCourses();
+			ArrayList<CourseDTO> data = adminManager.listAllCourses();
 			request.setAttribute("course", data);
 			request.setAttribute("usefor", "enrolment");
 			RequestDispatcher rd = request.getRequestDispatcher("/admin_managecourses.jsp");
@@ -189,7 +181,20 @@ public class AdminEnrolmentController extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-		
+		}
+		else
+		{
+			RequestDispatcher rd = request.getRequestDispatcher("/admin_login.jsp");
+			try {
+				rd.forward(request, response);
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 	}
 
@@ -197,7 +202,9 @@ public class AdminEnrolmentController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doProcess(request,response);
+
+			doProcess(request,response);
+
 	}
 
 }

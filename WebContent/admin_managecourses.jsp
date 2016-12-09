@@ -3,14 +3,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
-<%@page errorPage="error.jsp" %>
+<%-- <%@page errorPage="error.jsp" %> --%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,700'
 	rel='stylesheet' type='text/css'>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<fmt:setBundle basename="messages" />
+<title><fmt:message key="course.title" /></title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
 	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
@@ -23,6 +24,7 @@
 }
 </style>
 <%@include file="header.jsp"%>
+
 </head>
 <body id="body">
 	<div id="wrapper container">
@@ -37,18 +39,18 @@
 							<%
 								if (request.getAttribute("usefor").equals("Course")) {
 							%>
-&nbsp;&nbsp;<span id="title"> Manage Course Page</span>
+&nbsp;&nbsp;<span id="title"> <fmt:message key="label.course.title" /></span>
 					<div class="right-content">
 						&nbsp;
 
 						<div id="content" class="align">
 						
-							<div id="subtitle">&nbsp;&nbsp;List of Course</div>
+							<div id="subtitle">&nbsp;&nbsp;<fmt:message key="label.course.subtitle" /></div>
 							<br />
 							<c:url var="url" scope="page" value="/processCourse.jsp">
 							</c:url>
 							<a href="${url}"><button id="add-button">
-									<img src="images/add_student.png" />Add Course&nbsp;
+									<img src="images/add_student.png" /><fmt:message key="label.course.addCourse" />&nbsp;
 								</button></a>
 								<p class="message">${message}</p>
 <center>
@@ -68,7 +70,7 @@
 												<c:param name="action" value="edit" />
 											</c:url> <a href="${editurl}">
 												<button type="submit" id="add-button">
-													<img src="images/edit_student.png" />Edit
+													<img src="images/edit_student.png" /><fmt:message key="button.course.edit" />
 												</button>
 										</a>
 								</display:column>
@@ -79,7 +81,7 @@
 												<c:param name="action" value="delete" />
 											</c:url> <a href="${delurl}">
 												<button type="submit" id="add-button">
-													<img src="images/delete_student.png" />Delete
+													<img src="images/delete_student.png" /><fmt:message key="button.course.delete" />
 												</button>
 										</a>
 								</display:column>
@@ -96,13 +98,13 @@
 							}
 						%>
 <%if (request.getAttribute("usefor").equals("enrolment")) {%>
-&nbsp;&nbsp;<span id="title"> Manage Enrolment Page</span>
+&nbsp;&nbsp;<span id="title"> <fmt:message key="label.enrolment.title" /></span>
 					<div class="right-content">
 						&nbsp;
 
 						<div id="content" class="align">
 						
-<div id="subtitle">&nbsp;&nbsp;List of Course</div>
+<div id="subtitle">&nbsp;&nbsp;<fmt:message key="label.enrolment.subtitle" /></div>
 							<br />
 <center>
 							<display:table class="student-list" name="course" pagesize="10" requestURI="/admin_managecourses"
@@ -121,7 +123,7 @@
                              <c:param name="action" value="view"/>
                         </c:url>
                         
-                        <a href="${viewurl}"><button type="submit" id="add-button"><img src="images/edit_student.png" />View Enrollment</button></a>
+                        <a href="${viewurl}"><button type="submit" id="add-button"><img src="images/edit_student.png" /><fmt:message key="button.enrolment.view" /></a>
 							</display:column>
 								<display:setProperty name="paging.banner.placement"
 									value="bottom" />
@@ -131,7 +133,7 @@
 		</div>
 
 <%}%>
-						<!-- content -->
+					
 					</div>
 	
 	</div>		

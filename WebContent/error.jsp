@@ -15,7 +15,6 @@
 <link href="css/student/student_style.css" rel="stylesheet"
 	type="text/css" />
 
-	<%@include file="header.jsp"%>
 	<style>
 .pagebanner {
 	display: none;
@@ -23,13 +22,13 @@
 </style>
 </head>
 <body id="body">
-<%@include file="header.jsp"%>
+
 
 <div id="wrapper">
   
    <div class="row">
 <div class="col-sm-3"  >
-        <%@include file="menu.jsp"%>
+     
 </div>
  <div>
  <div class="col-sm-9">
@@ -44,6 +43,6 @@
  </div>
  </div>
  </div>
- 	<div><%@include file="footer.jsp"%></div>
+ 	
 </body>
 </html>

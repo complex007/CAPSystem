@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import exception.MyDataException;
 import model.LecturerDTO;
@@ -178,8 +179,11 @@ public class LecturerController extends HttpServlet {
 			}
 
 		}
-
+		
 	}
+
+
+	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
